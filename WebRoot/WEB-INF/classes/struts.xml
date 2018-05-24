@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+  
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+	<constant name="struts.serve.static.browserCache" value="false"/>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.configuration.xml.reload" value="true" />
+    <constant name="struts.action.extension" value="action" />
+ 	<constant name="struts.multipart.saveDir" value="/tmp" />
+ 	
+ 	<package name="base" extends="struts-default">
+		<global-results>
+			<result name="error">/error.jsp</result>
+			<result name="exception">/exception.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+   		 	<exception-mapping result="exception" exception="java.lang.Exception"/>
+   		 </global-exception-mappings>
+	</package>
+ 	
+ 	<package name="login" extends="base" namespace="/enter">
+ 	  <interceptors>
+ 	    <interceptor name="permission" class="bit.interceptor"></interceptor>
+ 	    <interceptor-stack name="permissionStack">
+ 	      <interceptor-ref name="defaultStack"></interceptor-ref>
+ 	      <interceptor-ref name="permission"></interceptor-ref>
+ 	    </interceptor-stack>
+ 	  </interceptors>
+ 	  <default-interceptor-ref name="permissionStack"></default-interceptor-ref>
+ 	  
+ 	  <!-- 用于微信服务器认证wx_authenServer.action -->
+ 	  <action name="wx_*" class="bit.action.WXCode" method="{1}">
+ 	  	<result name="home" type="chain">homePage_getHome</result>
+ 	  </action>
+ 	  
+ 	  <action name="homePage_*" class="bit.action.HomeAction" method="{1}">
+ 	  	<result name="homeJsp">/home.jsp</result>
+ 	  	<result name="prayJsp">/pray.jsp</result>
+ 	  	<result name="administorJsp">/administor.jsp</result>
+ 	  	<result name="bgs">/bgs.jsp</result>
+ 	  	<result name="shakeJsp">/shake.jsp</result>
+ 	    <result name="test">/index.jsp</result>
+ 	  </action>
+ 	  
+ 	  <action name="userPage_*" class="bit.action.UserAction" method="{1}">
+ 	  	<result type="redirectAction" name="home">homePage_getHome</result>
+ 	  	<result name="personalJsp">/personal.jsp</result>
+ 	    <result name="user">/index.jsp</result>
+ 	  </action>
+ 	  
+ 	  <action name="messPage_*" class="bit.action.MessageAction" method="(1)">
+ 	  	<result type="redirectAction" name="home">homePage_getHome</result>
+ 	    <result name="mess">/index.jsp</result>
+ 	  </action>
+ 	  
+ 	  
+ 	  
+ 	</package> 
+ 	
+ 	
+ 	
+	
+	 <package name="default" namespace="/" extends="struts-default">
+	  <action name="testAction_*" class="bit.action.TestAction" method="{1}">
+	    <result name="test1">/MyJsp.jsp</result>
+	  </action>
+	</package> 
+
+</struts>    
